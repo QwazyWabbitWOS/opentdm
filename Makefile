@@ -65,7 +65,7 @@ all: $(TARGET)
 
 default: all
 
-.PHONY: clean
+.PHONY: all default clean strip
 
 # Define V=1 to show command line.
 ifdef V
