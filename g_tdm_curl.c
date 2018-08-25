@@ -232,7 +232,7 @@ handle.
 void HTTP_StartDownload (dlhandle_t *dl)
 {
 	cvar_t				*hostname;
-	char				escapedFilePath[2048];
+	char				escapedFilePath[1024*3];
 
 	hostname = gi.cvar ("hostname", NULL, 0);
 	if (!hostname)
@@ -468,7 +468,7 @@ qboolean HTTP_QueueDownload (tdm_download_t *d)
 
 	downloads[i].tdm_handle = d;
 	downloads[i].inuse = true;
-	strncpy (downloads[i].filePath, d->path, sizeof(downloads[i].filePath)-1);
+	strcpy (downloads[i].filePath, d->path);
 	HTTP_StartDownload (&downloads[i]);
 
 	return true;
