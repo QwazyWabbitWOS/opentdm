@@ -33,6 +33,15 @@ else
     LDFLAGS += -Wl,--no-undefined
 endif
 
+ifndef CONFIG_X86_NO_SSE_MATH
+    ifeq ($(CPU),x86)
+        CFLAGS += -msse -mfpmath=sse
+    endif
+    ifeq ($(CPU),i386)
+        CFLAGS += -msse -mfpmath=sse
+    endif
+endif
+
 CFLAGS += -DC_ONLY
 CFLAGS += -DOPENTDM_VERSION='"$(VER)"' -DOPENTDM_REVISION=$(REV)
 RCFLAGS += -DOPENTDM_VERSION='\"$(VER)\"' -DOPENTDM_REVISION=$(REV)
