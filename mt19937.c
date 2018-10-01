@@ -51,18 +51,3 @@ uint32 genrand_int32(void)
 
     return y;
 }
-
-int32 genrand_int31(void)
-{
-    return genrand_int32() >> 1;
-}
-
-double genrand_float32_full(void)
-{
-    return genrand_int32() * (1.0 / 4294967295.0);
-}
-
-double genrand_float32_notone(void)
-{
-    return genrand_int32() * (1.0 / 4294967296.0);
-}
