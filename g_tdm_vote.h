@@ -113,3 +113,5 @@ extern char			**tdm_configlist;
 #define VOTE_1V1_SPAWNMODE	0x20000
 
 #define VOTE_ABORT			0x40000
+
+#define VOTE_SHUFFLE		0x80000

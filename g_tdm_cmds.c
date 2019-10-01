@@ -151,6 +151,7 @@ void TDM_Acommands_f (edict_t *ent)
 		"readyall           Force all players to be ready\n"
 //		"forceteam          Force team\n"
 		"notreadyall        Force all players not to be ready\n"
+		"shuffle            Randomly shuffle team players\n"
 		);
 }
 
@@ -2415,6 +2416,30 @@ void TDM_TeamEnemySkin_f (edict_t *ent, qboolean team)
 
 /*
 ==============
+TDM_Shuffle_f
+==============
+Randomize (shuffle) team players.
+*/
+void TDM_Shuffle_f(edict_t *ent)
+{
+	if (tdm_match_status != MM_WARMUP)
+	{
+		gi.cprintf (ent, PRINT_HIGH, "You can't shuffle players while a match is in progress.\n");
+		return;
+	}
+
+	if (teaminfo[TEAM_A].players + teaminfo[TEAM_B].players < 2)
+	{
+		gi.cprintf (ent, PRINT_HIGH, "Not enough players to shuffle.\n");
+		return;
+	}
+
+	TDM_RandomizeTeams();
+	gi.bprintf(PRINT_HIGH, "Teams randomized...\n");
+}
+
+/*
+==============
 TDM_Command
 ==============
 Process TDM commands (from ClientCommand)
@@ -2487,6 +2512,11 @@ qboolean TDM_Command (const char *cmd, edict_t *ent)
 		else if (!Q_stricmp (cmd, "changemap"))
 		{
 			TDM_Changemap_f (ent);
+			return true;
+		}
+		else if (!Q_stricmp (cmd, "shuffle"))
+		{
+			TDM_Shuffle_f (ent);
 			return true;
 		}
 	}

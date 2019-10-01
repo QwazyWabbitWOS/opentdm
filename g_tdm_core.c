@@ -3325,3 +3325,74 @@ void TDM_UpdateSpectatorsOnEvent (int spec_mode, edict_t *target, edict_t *kille
 			SetChase (e, new_target);
 	}
 }
+
+/*
+==============
+TDM_RandomizeTeams
+==============
+Shuffle all team players randomly. Doesn't touch spectators.
+*/
+void TDM_RandomizeTeams(void)
+{
+	int i, count;
+	edict_t *players[MAX_CLIENTS];
+	edict_t *e;
+
+	count = 0;
+
+	// build an array of just team players
+	for (i = 0; i < game.maxclients; i++) {
+		e = g_edicts + i + 1;
+
+		if (!e->inuse)
+			continue;
+
+		if (!e->client)
+			continue;
+
+		if (!e->client->pers.team)
+			continue;
+
+		players[count++] = e;
+	}
+
+	if (count < 2)
+		return;
+
+	RandomizeArray((void *)players, count);
+
+	// put players on new teams
+	for (i = 0; i < count; i++) {
+		e = players[i];
+
+		// unready them
+		e->client->resp.ready = false;
+
+		// set the team, alternating
+		e->client->pers.team = (i % 2) ? TEAM_A : TEAM_B;
+
+		// make them captain
+		teaminfo[e->client->pers.team].captain = e;
+
+		// tell everyone their skin
+		gi.configstring(
+			CS_PLAYERSKINS + (e - g_edicts) - 1,
+			va("%s\\%s",
+				e->client->pers.netname,
+				teaminfo[e->client->pers.team].skin
+			)
+		);
+
+		// set everyone else's skin for this player
+		TDM_SetAllTeamSkins(e);
+
+		// set this player's skin
+		TDM_SetTeamSkins(e, NULL);
+
+		// throw them back in the game
+		respawn(e);
+	}
+
+	// check stuff now that the teams are different
+	TDM_TeamsChanged();
+}
