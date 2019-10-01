@@ -2344,7 +2344,7 @@ void TDM_VoteMenuApply (edict_t *ent)
 		}
 	}
 
-	if (ent->client->pers.votemenu_values.kick != NULL)
+	if (ent->client->pers.votemenu_values.kick && ent->client->pers.votemenu_values.kick->inuse)
 	{
 		if (newvote)
 			gi.cprintf (ent, PRINT_HIGH, "You cannot propose vote kick with other options.\n");
