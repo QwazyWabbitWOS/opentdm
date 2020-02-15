@@ -1337,6 +1337,8 @@ ROGUE - VERSIONS
 #define	ANGLE2SHORT(x)	((int)((x)*182.04444444444444444444444444444f) & 65535)
 #define	SHORT2ANGLE(x)	((x)*(0.0054931640625f))
 
+#define	COORD2SHORT(x)	((int)((x)*8.0f))
+#define	SHORT2COORD(x)	((x)*(1.0f/8))
 
 //
 // config strings are a general means of communication from
